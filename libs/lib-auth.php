@@ -25,7 +25,8 @@ class Authentication {
         if ($pwf && ($enabled = 1)) {
             session_regenerate_id();
             $_SESSION['logged_in'] = true;
-            $_SESSION['email'] = $_POST['email'];
+            $_SESSION['email'] = $email;
+            $_SESSION['member_id'] = $this->getMemberID($_SESSION['email']);
             return true;
         } else {
             return false;
@@ -45,11 +46,11 @@ class Authentication {
         } else {
             $data['username'] = $_SESSION['username'];
             $data['email'] = $_SESSION['email'];
+            $data['member_id'] = $_SESSION['member_id'];
             $data['role'] = $_SESSION['role'];
             return $data;
         }
     }
-
     
 
     public function isadminli() {
@@ -72,44 +73,7 @@ class Authentication {
         }
     }
 
-    public function headblock () {
-        if (is_array($this->islogged())) {
-            echo "<!--";
-        }
-    }
 
-    // public function headendblock ($ar = false) {
-    //     if (is_array($this->islogged())) {
-    //         $authinfo = $this->islogged();
-    //         echo "-->";
-    //         $text = '<div class=\'nav pull-right navbar-nav\' style=\'color: white\'>
-    //                     <li class=\'dropdown\'>
-    //                     <a class="dropdown-toggle" href="#" data-toggle="dropdown" style=\'padding-right: 10px\'>' . $authinfo['username'] . ' <strong class="caret"></strong></a>
-    //                         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu">
-    //                             <li><a tabindex="-1" href="/dashboard/index.php">대시보드</a></li>
-    //                             <!--li><a tabindex="-1" href="/dashboard/index.php#settings">설정</a></li-->
-    //                             <li><a tabindex="-1" href="/logout.php">로그아웃</a></li>
-    //                         </ul>
-    //                     </li>
-    //                 </div>';
-    //         if ($ar == true) {
-    //             # if called from UCP
-    //             $text = '<div class=\'nav pull-right navbar-nav\' style=\'color: white\'>
-    //                         <li class=\'dropdown\'>
-    //                         <a class="dropdown-toggle" href="#" data-toggle="dropdown" style=\'padding-right: 10px\'>' . $authinfo['username'] . ' <strong class="caret"></strong></a>
-    //                             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu">
-    //                                 <li><a tabindex="-1" href="index.php">대시보드</a></li>
-    //                                 <!--li><a tabindex="-1" href="index.php#settings">설정</a></li-->
-    //                                 <li><a tabindex="-1" href="/logout.php">로그아웃</a></li>
-    //                             </ul>
-    //                         </li>
-    //                     </div>';
-    //         }
-
-
-    //         echo $text;
-    //     }
-    // }
 
     public function getRole($email) {
         global $mysqli;
@@ -135,7 +99,7 @@ class Authentication {
         global $mysqli;
         $username = $mysqli->real_escape_string($username);
         $a = "SELECT `role`,`username`,`ip`,`theme`,`rkey` FROM `auth` WHERE username='{$username}';";
-        $b = $mysqli->query($a) or showerror();
+        $b = $mysqli->query($a);
 
         $numrows = $b->num_rows;
         if (!$numrows) {
@@ -149,7 +113,7 @@ class Authentication {
         global $mysqli;
         $username = $mysqli->real_escape_string($username);
         $a = "SELECT `nickname`, `email`, `sex` FROM `auth` WHERE username='{$username}';";
-        $b = $mysqli->query($a) or showerror();
+        $b = $mysqli->query($a);
         $numrows = $b->num_rows;
         if (!$numrows) {
             return false;
@@ -163,7 +127,7 @@ class Authentication {
         $email = $mysqli->real_escape_string($email);
         //$a = "SELECT `role`,`username`,`ip,`theme`,`rkey` FROM `auth` WHERE email='{$email}';";
         $a = "SELECT `role`,`username`,`ip`,`theme`,`rkey` FROM `auth` WHERE email='{$email}';";
-        $b = $mysqli->query($a) or showerror();
+        $b = $mysqli->query($a);
 
         $numrows = $b->num_rows;
         if (!$numrows) {
@@ -178,6 +142,19 @@ class Authentication {
         $nrkey = sha1($username . (string) (rand(100, 4434555)) . date('yDm'));
         $usernamesan = $mysqli->real_escape_string($username);
         $qr = "UPDATE auth SET rkey='{$nrkey}' WHERE username='$usernamesan';";
-        $e = $mysqli->query($qr) or showerror();
+        $e = $mysqli->query($qr);
+    }
+
+    public function getMemberID ($email) {
+        global $mysqli;
+        $email = $mysqli->real_escape_string($email);
+        $a = "SELECT `member_id` FROM `memberlist` WHERE email='{$email}';";
+        $b = $mysqli->query($a);
+        $numrows = $b->num_rows;
+        if (!$numrows) {
+            return false;
+        }
+        $c = mysqli_fetch_assoc($b);
+        return $c['member_id'];
     }
 }

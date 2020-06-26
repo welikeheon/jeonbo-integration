@@ -6,6 +6,12 @@ require __DIR__ . '/../vendor/autoload.php';
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
+
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../config/');
+$dotenv->load();
+
+
 require_once('lib-auth.php');
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -42,7 +48,7 @@ function sql_checknum($table, $row, $where, $value) {
     if (!$row_element) {    // 없으면 false
         return false;
     }
-    return true;    // 있으면 true
+    return $row_element;    // 있으면 true
 }
 
 function sql_fetch($table, $row, $where, $value) {

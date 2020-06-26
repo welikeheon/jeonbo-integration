@@ -7,6 +7,12 @@ use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Filesystem;
 
+// # S3 클라이언트
+// $s3 = new Aws\S3\S3Client([
+//     'version' => 'latest',
+//     'region' => 'ap-northeast-2'
+// ]);
+
 $client = new S3Client([
     'credentials' => [
         'key'    => $AWS_ACCESS_KEY_ID,
