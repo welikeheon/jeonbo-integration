@@ -4,6 +4,8 @@ if (isset($title) == false) {
     $title = "전보";
 }
 
+require_once("../../libs/lib-auth.php");
+$auth = new Authentication();
 ?>
 
 <!doctype html>
@@ -38,51 +40,30 @@ if (isset($title) == false) {
         <span class="navbar-toggler-icon"></span>
       </button>
 
+
       <div class="collapse navbar-collapse" id="navbarColor02">
-        <!-- <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">홈 <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">내 전자책</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">통계</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">고객센터</a>
-          </li>
-        </ul> -->
-
-
         <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+        
+        <?php if (!$auth->islogged) { ?>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+            <a class="nav-link" href="/logout.php">로그아웃</a>
+            </li>
+          </ul>
+        <?php } else { ?>
           <ul class="navbar-nav">
             <li class="nav-item">
             <a class="nav-link" href="#">회원가입</a>
-            <!-- <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-              <div class="dropdown-menu" style="">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Separated link</a>
-              </div>
-            </li> -->
             </li>
             <li class="nav-item">
               <a href="" class="nav-link">로그인</a>
             </li>
           </ul>
+          
+
+        <?php } ?>
+
         </div>
-
-        <!-- <div class="my-2 my-lg-0">
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-          </form>
-        </div> -->
-
       </div>
     </div>
   </nav>
