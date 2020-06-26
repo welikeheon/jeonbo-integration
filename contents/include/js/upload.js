@@ -1,6 +1,7 @@
 Dropzone.options.myAwesomeDropzone = {
     paramName: "file", // The name that will be used to transfer the file
     maxFilesize: 2048, // MB
+    timeout: 0,
     accept: function(file, done) {
         if (file.name == "justinbieber.jpg") {
             done("Naha, you don't.");
@@ -20,12 +21,14 @@ Dropzone.options.myAwesomeDropzone = {
         let file_path = $("input[name='file_path']").val(res.filepath);
         let file_size = $("input[name='file_size']").val(res.filesize);
         let file_name = $("input[name='file_name']").val(res.realname);
+        $('#submit').prop('disabled', false);
     },
     complete: function (file) {
         console.log("Complete");
     }
 };
 $(function() {
+    $('#submit').prop('disabled', true)
     let booktitle = $("input[name='book_title'");
 
     $('#book_title').select2({
@@ -46,7 +49,7 @@ $(function() {
                 return {
                     results: $.map(data, function(item) {
                         return {
-                            text: item.title,
+                            text: item.title_on_search,
                             id: item.order,
                             author: item.author,
                             description: item.description,
@@ -82,22 +85,17 @@ $(function() {
         })
     });
 
-   
-    // $("#file").dropzone({
-    //     url: "../../handle/handle-upload.php",
-    //     maxFilesize: 3,
-    //     error: function (file, response) {
-    //         console.log("Erro");
-    //         console.log(response);
-    //     },
-    //     success: function (file, response) {
-    //         console.log("Sucesso");
-    //         console.log(response);
-    //     },
-    //     complete: function (file) {
-    //         console.log("Complete");
-    //     }
-    // });
+    $("#submit").click(function() {
+        if ($('#book_title').val() === null || $('input[name="file_path"]').val() == "") {
+            Swal.fire({
+                icon: 'error',
+                title: '오류가 발생했습니다...',
+                text: '책 제목이나 파일이 제대로 올라가지 않은 것 같습니다. \n 확인 후 다시 시도해주세요!'
+            })
+        } else {
+            $("#uploadbook").submit();
+        }
+    });
 });
 
 Dropzone.prototype.defaultOptions.dictDefaultMessage = "이곳에 파일을 떨어트려 업로드하세요.";

@@ -1,4 +1,7 @@
 <?php
+
+use Aws\S3\Exception\S3Exception;
+ini_set('max_execution_time', 0); 
 require("../libs/lib-s3.php");
 $auth = new Authentication();
 
@@ -10,23 +13,28 @@ if(!is_array($auth->islogged())) {
     
     $date = date('YmdHisu'); // 20200617115012826395
     $fileformat = $date.$_FILES['file']['name'];
-    $stream = fopen($_FILES['file']['tmp_name'], 'r+');
-    $result = array(
-        "fileformat" => $fileformat,
-        "tmp_name" => $_FILES['file']['tmp_name'],
-        "realname" => $_FILES['file']['name'],
-        "filepath" => 'uploads/' . $date . '_'. $_FILES['file']['name'],
-        "filesize" => $_FILES['file']['size'],
-        "file_extension" => pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION)
-    );
-    
-    $response = $filesystem->writeStream(
-        'uploads/' . $date . $_FILES['file']['name'],
-        $stream
-    );
-    if (is_resource($stream)) {
-        fclose($stream);
+
+    try {
         
+        $stream = fopen($_FILES['file']['tmp_name'], 'r+');
+        $result = array(
+            "fileformat" => $fileformat,
+            "tmp_name" => $_FILES['file']['tmp_name'],
+            "realname" => $_FILES['file']['name'],
+            "filepath" => 'uploads/' . $date . '_'. $_FILES['file']['name'],
+            "filesize" => $_FILES['file']['size'],
+            "file_extension" => pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION)
+        );
+        
+        $response = $filesystem->writeStream(
+            'uploads/' . $date . '_'. trim($_FILES['file']['name']),
+            $stream
+        );
+        if (is_resource($stream)) {
+            fclose($stream);
+        }
+    } catch (S3Exception $e) {
+        echo $e;
     }
 
     if ($response == true) {
@@ -34,23 +42,4 @@ if(!is_array($auth->islogged())) {
         echo $res;
     }
 }
-
-
-
-
-
-// if(!is_array($auth->islogged())) {
-    
-//     return header("HTTP/1.1 404 Not Found");
-// } else {
-//     $date = date('YmdHisu'); // 20200617115012826395
-//     $path = "upload/" . $_SESSION['email'];
-
-//     try {
-//         $filesystem->writeStream($path, $stream, $config);
-//     } catch (FilesystemError | UnableToWriteFile $exception) {
-//         // handle the error
-//     }
-// }
-
 

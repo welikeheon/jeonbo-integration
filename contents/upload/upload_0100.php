@@ -1,6 +1,8 @@
 <?php
 
 $title = '새 책 업로드하기';
+$active = 2;
+
 require_once("../../libs/lib-core.php");
 $auth = new Authentication();
 if (!is_array($auth->islogged())) {
@@ -18,38 +20,17 @@ require('../include/header.php');
 
 <div class="jumbotron">
     <div class="container">
-        <h1 class="display-4">전자책 보관함</h1>
-        <p class="lead">전자책을 보관하는 장소입니다.</p>
+        <h1 class="display-4">새 책 업로드하기</h1>
+        <p class="lead">새 책을 업로드하고, 전자책을 안전하게 보관하세요!</p>
     </div>
 </div>
 
 <div class="container">
     <div class="row">
-        <div class="col-4">
-            <!-- 사이드바 시작 -->
-            <ul class="nav nav-pills flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="../main/main_0100.php">내 책 보기</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="../upload/upload_0100.php">새 책 업로드하기</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
-                </li>
-            </ul>
-            <!-- 사이드바 끝 -->
-        </div>
+        <?php include "../sidebar/sidebar_0100.php"; ?>
         <div class="col 8">
             <!-- 본문 시작 -->
-            <form action="./process-upload.php" enctype="multipart/form-data" method="post">
+            <form action="./process-upload.php" id="uploadbook" enctype="multipart/form-data" method="post">
                 <div class="form-group">
                     <label for="book_title">책 제목</label>
                     <select class="form-control border-primary" autocomplete="off" id="book_title" aria-describedby="title_helper"></select>
@@ -84,7 +65,6 @@ require('../include/header.php');
                 <input type="hidden" name="file_format" />
 
 
-                <button type="submit" class="btn btn-primary">확인</button>
             </form>
 
             <form action="../../handle/handle-upload.php" enctype="multipart/form-data" method="post" class="dropzone" id="my-awesome-dropzone">
@@ -94,6 +74,10 @@ require('../include/header.php');
                 </div>
             </form>
 
+
+            <div class="my-4">
+            <button type="button" id="submit" class="btn btn-primary">확인</button>
+            <small class=""></small>
             <!-- 본문 끝 -->
         </div>
     </div>
