@@ -29,3 +29,6 @@ composer.phar
 
 .env
 계정정보.txt
+
+
+monolog.log
