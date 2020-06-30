@@ -44,10 +44,10 @@ $auth = new Authentication();
         <?php if (!$auth->islogged()) { ?>
           <ul class="navbar-nav">
             <li class="nav-item">
-            <a class="nav-link" href="#">회원가입</a>
+            <a class="nav-link" href="/contents/register/register_0100.php">회원가입</a>
             </li>
             <li class="nav-item">
-              <a href="" class="nav-link">로그인</a>
+              <a href="/contents/hello/hello_0100.php" class="nav-link">로그인</a>
             </li>
           </ul>
           
