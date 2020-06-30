@@ -32,11 +32,8 @@ if ($login == true) {
     }
     // 방금 만든 토큰을 데이터베이스에 업데이트한다.
     // 입력받은 아이디가 있는 위치에 업데이트.
-    // update auth set token '$token' where username=?
 
     $_SESSION['token'] = $token; // 세션에 토큰 값 기록
-
-    $_SESSION['listed'] = sha1('listed');
     $_SESSION['username'] = $auth->getUsername($authform['email']);
     $_SESSION['email'] = $authform['email'];
     $_SESSION['role'] = $auth->getRole($authform['email']);

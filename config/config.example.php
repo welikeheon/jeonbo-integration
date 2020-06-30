@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection SyntaxError */
 $host=
 $user=
 $password=

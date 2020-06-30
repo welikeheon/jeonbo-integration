@@ -59,7 +59,7 @@ $opts = array(
 $hashed = password_hash($reguser['password'], PASSWORD_BCRYPT, $opts);
 $reguser['password'] = $hashed;
 
-$stmt1 = $mysqli->prepare("INSERT INTO memberlist (username, password, enabled, created_ip, email) VALUES (?, ?, 0, ?, ?)");
+$stmt1 = $mysqli->prepare("INSERT INTO memberlist (username, password, enabled, created_ip, email) VALUES (?, ?, 1, ?, ?)");
 $stmt1->bind_param("ssss", $reguser['username'], $reguser['password'], $reguser['ip_addr'], $reguser['email']);
 if (!$stmt1->execute()) {
     echo $mysqli->error;

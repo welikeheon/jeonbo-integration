@@ -29,7 +29,7 @@ Dropzone.options.myAwesomeDropzone = {
 };
 $(function() {
     $('#submit').prop('disabled', true)
-    let booktitle = $("input[name='book_title'");
+    let booktitle = $("input[name=book_title]");
 
     $('#book_title').select2({
         ajax: {

@@ -26,6 +26,7 @@ class Authentication {
             session_regenerate_id();
             $_SESSION['logged_in'] = true;
             $_SESSION['email'] = $email;
+            $_SESSION['role'] = $this->getRole($this->getMemberID($_SESSION['email']));
             $_SESSION['member_id'] = $this->getMemberID($_SESSION['email']);
             return true;
         } else {
@@ -41,7 +42,7 @@ class Authentication {
 
 
     public function islogged() {
-        if (@$_SESSION['listed'] !== sha1('listed')) {
+        if (!$_SESSION['member_id']) {
             return false;
         } else {
             $data['username'] = $_SESSION['username'];
@@ -53,108 +54,45 @@ class Authentication {
     }
     
 
-    public function isadminli() {
-        if ($_SESSION['listed'] !== sha1('listed')) {
-            return false;
-        } else {
-            if ($_SESSION['role'] == 'adm') {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
-    public function isadmin ($user) {
-        if ($this->getrole($user) == 'adm') {
+    public function isAdmin ($member_id) {
+        if ($this->getRole($member_id) == 'Administrator') {
             return true;
         } else {
             return false;
         }
     }
 
-
-
-    public function getRole($email) {
+    public function getRole($member_id) {
         global $mysqli;
-        $stmt = $mysqli->prepare("select role from memberlist where email = ?");
-        $stmt->bind_param('s', $email);
+        $stmt = $mysqli->prepare("select role from memberlist where member_id = ?");
+        $stmt->bind_param('i', $member_id);
         $stmt->execute();
         $result = $stmt->get_result();
-        $query_result = mysqli_fetch_assoc($result);
-        return $query_result['role'];
+        $row = $result->fetch_assoc();
+        if ($row['role'] == NULL) {
+            return "User";
+        }
+        return $row['role'];
     }
 
-    public function getUsername($email) {
+    public function getUsername($member_id) {
         global $mysqli;
-        $stmt = $mysqli->prepare("select username from memberlist where email = ?");
-        $stmt->bind_param('s', $email);
+        $stmt = $mysqli->prepare("select username from memberlist where member_id = ?");
+        $stmt->bind_param('i', $member_id);
         $stmt->execute();
         $result = $stmt->get_result();
-        $query_result = mysqli_fetch_assoc($result);
-        return $query_result['username'];
-    }
-
-    public function getinfomu ($username) {
-        global $mysqli;
-        $username = $mysqli->real_escape_string($username);
-        $a = "SELECT `role`,`username`,`ip`,`theme`,`rkey` FROM `auth` WHERE username='{$username}';";
-        $b = $mysqli->query($a);
-
-        $numrows = $b->num_rows;
-        if (!$numrows) {
-            return false;
-        }
-        $c = mysqli_fetch_assoc($b);
-        return $c;
-    }
-    
-    public function getsettingvalue ($username) {
-        global $mysqli;
-        $username = $mysqli->real_escape_string($username);
-        $a = "SELECT `nickname`, `email`, `sex` FROM `auth` WHERE username='{$username}';";
-        $b = $mysqli->query($a);
-        $numrows = $b->num_rows;
-        if (!$numrows) {
-            return false;
-        }
-        $c = mysqli_fetch_assoc($b);
-        return $c;
-    }
-
-    public function getinfome ($email) {
-        global $mysqli;
-        $email = $mysqli->real_escape_string($email);
-        //$a = "SELECT `role`,`username`,`ip,`theme`,`rkey` FROM `auth` WHERE email='{$email}';";
-        $a = "SELECT `role`,`username`,`ip`,`theme`,`rkey` FROM `auth` WHERE email='{$email}';";
-        $b = $mysqli->query($a);
-
-        $numrows = $b->num_rows;
-        if (!$numrows) {
-            return false;
-        }
-        $c = mysqli_fetch_assoc($b);
-        return $c;
-    }
-
-    public function crkey ($username) {
-        global $mysqli;
-        $nrkey = sha1($username . (string) (rand(100, 4434555)) . date('yDm'));
-        $usernamesan = $mysqli->real_escape_string($username);
-        $qr = "UPDATE auth SET rkey='{$nrkey}' WHERE username='$usernamesan';";
-        $e = $mysqli->query($qr);
+        $row = $result->fetch_assoc();
+        return $row['username'];
     }
 
     public function getMemberID ($email) {
         global $mysqli;
-        $email = $mysqli->real_escape_string($email);
-        $a = "SELECT `member_id` FROM `memberlist` WHERE email='{$email}';";
-        $b = $mysqli->query($a);
-        $numrows = $b->num_rows;
-        if (!$numrows) {
-            return false;
-        }
-        $c = mysqli_fetch_assoc($b);
-        return $c['member_id'];
+        $sql = "SELECT `member_id` FROM `memberlist` WHERE email=?";
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return $row['member_id'];
     }
 }

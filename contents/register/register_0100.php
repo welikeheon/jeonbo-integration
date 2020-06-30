@@ -13,7 +13,7 @@ require('../include/header.php');
     </div>
 </div>
 
-<div class="card img-fluid text-white" style="width:100%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),url('/images/main/library-1.JPG') center center; height: 50vh; background-size: cover; margin-top:-30px">
+<div class="card img-fluid text-white" style="width:100%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),url('/images/main/library-1.JPG') center center; height: 500px; background-size: cover; margin-top:-30px">
     <div class="card-img-overlay">
 
         <div class="container">

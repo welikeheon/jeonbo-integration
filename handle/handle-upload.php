@@ -27,7 +27,7 @@ if(!is_array($auth->islogged())) {
         );
         
         $response = $filesystem->writeStream(
-            'uploads/' . $date . '_'. trim($_FILES['file']['name']),
+            'uploads/' . $date . '_'. $_FILES['file']['name'],
             $stream
         );
         if (is_resource($stream)) {
