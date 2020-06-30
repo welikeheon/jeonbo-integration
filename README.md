@@ -1,5 +1,5 @@
 # 😷 Jeonbo(Ebook Management System)
-## Powerful Gate Keeper System for Covid19
+## Fast, stylish and safe e-book storage service
 ![Version - 1.0.0](https://img.shields.io/badge/Version-1.0.0-orange.svg)
 
 ## Authors
