@@ -1,4 +1,4 @@
-# 😷 Jeonbo(Ebook Management System)
+# 📚 Jeonbo(Ebook Management System)
 ## Fast, stylish and safe e-book storage service
 ![Version - 1.0.0](https://img.shields.io/badge/Version-1.0.0-orange.svg)
 
